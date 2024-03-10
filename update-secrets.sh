@@ -42,6 +42,22 @@ add_user_to_file() {
     echo "$user : EAP \"$password\"" >> "$FILE_PATH_SECRETS"
 }
 
+# generate_mobileconfig() {
+#     local userName="$1"
+#     local password="$2"
+#     local cert="$3"
+#     local ip="$4"
+#     local template_path="vpn-config.mobileconfig.template"
+#     local output_path="vpn-config.mobileconfig"
+
+#     sed -e "s/VPN_USERNAME/$userName/g" \
+#         -e "s/VPN_PASSWORD/$password/g" \
+#         -e "s/VPN_CERTIFICATE/$cert/g" \
+#         -e "s/VPN_SERVER_ADDRESS/$ip/g" \
+#         "$template_path" > "$output_path"
+# }
+# generate_mobileconfig "$userName" "$password" "$cert" "$ip"
+
 status_update=0
 
 # Loop through all users

@@ -1,3 +1,4 @@
+#!/bin/bash
 
 cat << EOF > vpn-ios.mobileconfig
 <?xml version='1.0' encoding='UTF-8'?>
@@ -55,9 +56,9 @@ cat << EOF > vpn-ios.mobileconfig
           </dict>
         </array>
         <key>RemoteAddress</key>
-        <string>${VPNHOST}</string>
+        <string>${VPN_PUBLIC_IP}</string>
         <key>RemoteIdentifier</key>
-        <string>${VPNHOST}</string>
+        <string>${VPN_PUBLIC_IP}</string>
         <key>UseConfigurationAttributeInternalIPSubnet</key>
         <integer>0</integer>
       </dict>
@@ -86,13 +87,13 @@ cat << EOF > vpn-ios.mobileconfig
         <integer>0</integer>
       </dict>
       <key>UserDefinedName</key>
-      <string>${VPNHOST}</string>
+      <string>${VPN_PUBLIC_IP}</string>
       <key>VPNType</key>
       <string>IKEv2</string>
     </dict>
   </array>
   <key>PayloadDisplayName</key>
-  <string>IKEv2 VPN configuration (${VPNHOST})</string>
+  <string>IKEv2 VPN configuration (${VPN_PUBLIC_IP})</string>
   <key>PayloadIdentifier</key>
   <string>com.mackerron.vpn.$(uuidgen)</string>
   <key>PayloadRemovalDisallowed</key>
@@ -169,9 +170,9 @@ set plist to "<?xml version='1.0' encoding='UTF-8'?>
           </dict>
         </array>
         <key>RemoteAddress</key>
-        <string>${VPNHOST}</string>
+        <string>${VPN_PUBLIC_IP}</string>
         <key>RemoteIdentifier</key>
-        <string>${VPNHOST}</string>
+        <string>${VPN_PUBLIC_IP}</string>
         <key>UseConfigurationAttributeInternalIPSubnet</key>
         <integer>0</integer>
       </dict>
@@ -200,13 +201,13 @@ set plist to "<?xml version='1.0' encoding='UTF-8'?>
         <integer>0</integer>
       </dict>
       <key>UserDefinedName</key>
-      <string>${VPNHOST}</string>
+      <string>${VPN_PUBLIC_IP}</string>
       <key>VPNType</key>
       <string>IKEv2</string>
     </dict>
   </array>
   <key>PayloadDisplayName</key>
-  <string>IKEv2 VPN configuration (${VPNHOST})</string>
+  <string>IKEv2 VPN configuration (${VPN_PUBLIC_IP})</string>
   <key>PayloadIdentifier</key>
   <string>com.mackerron.vpn.$(uuidgen)</string>
   <key>PayloadRemovalDisallowed</key>
@@ -231,72 +232,12 @@ EOF
 cat << EOF > vpn-android.sswan
 {
   "uuid": "$(uuidgen)",
-  "name": "${VPNHOST}",
+  "name": "${VPN_PUBLIC_IP}",
   "type": "ikev2-eap",
   "remote": {
-    "addr": "${VPNHOST}"
+    "addr": "${VPN_PUBLIC_IP}"
   }
 }
-EOF
-
-cat << EOF > vpn-ubuntu-client.sh
-if [[ \$(id -u) -ne 0 ]]; then echo "Please run as root (e.g. sudo ./path/to/this/script)"; exit 1; fi
-
-read -p "VPN username (same as entered on server): " VPNUSERNAME
-while true; do
-read -s -p "VPN password (same as entered on server): " VPNPASSWORD
-echo
-read -s -p "Confirm VPN password: " VPNPASSWORD2
-echo
-[ "\$VPNPASSWORD" = "\$VPNPASSWORD2" ] && break
-echo "Passwords didn't match -- please try again"
-done
-
-apt-get install -y strongswan libstrongswan-standard-plugins libcharon-extra-plugins
-apt-get install -y libcharon-standard-plugins || true  # 17.04+ only
-
-ln -f -s /etc/ssl/certs/ISRG_Root_X1.pem /etc/ipsec.d/cacerts/
-
-grep -Fq 'MikhailNuzhin' /etc/ipsec.conf || echo "
-conn ikev2vpn
-        ikelifetime=60m
-        keylife=20m
-        rekeymargin=3m
-        keyingtries=1
-        keyexchange=ikev2
-        ike=aes256gcm16-prfsha384-ecp384!
-        esp=aes256gcm16-ecp384!
-        leftsourceip=%config
-        leftauth=eap-mschapv2
-        eap_identity=\${VPNUSERNAME}
-        right=${VPNHOST}
-        rightauth=pubkey
-        rightid=@${VPNHOST}
-        rightsubnet=0.0.0.0/0
-        auto=add  # or auto=start to bring up automatically
-" >> /etc/ipsec.conf
-
-grep -Fq 'MikhailNuzhin' /etc/ipsec.secrets || echo "
-\${VPNUSERNAME} : EAP \"\${VPNPASSWORD}\"
-" >> /etc/ipsec.secrets
-
-ipsec restart
-sleep 5  # is there a better way?
-
-echo "Bringing up VPN ..."
-ipsec up ikev2vpn
-ipsec statusall
-
-echo
-echo -n "Testing IP address ... "
-VPNIP=\$(dig -4 +short ${VPNHOST})
-ACTUALIP=\$(dig -4 +short myip.opendns.com @resolver1.opendns.com)
-if [[ "\$VPNIP" == "\$ACTUALIP" ]]; then echo "PASSED (IP: \${VPNIP})"; else echo "FAILED (IP: \${ACTUALIP}, VPN IP: \${VPNIP})"; fi
-
-echo
-echo "To disconnect: ipsec down ikev2vpn"
-echo "To reconnect:  ipsec up ikev2vpn"
-echo "To connect automatically: change auto=add to auto=start in /etc/ipsec.conf"
 EOF
 
 cat << EOF > vpn-instructions.txt
@@ -326,14 +267,14 @@ You will need Windows 10 Pro or above. Please run the following commands in Powe
 
 \$Response = Invoke-WebRequest -UseBasicParsing -Uri https://valid-isrgrootx1.letsencrypt.org
 
-Add-VpnConnection -Name "${VPNHOST}" \`
-  -ServerAddress "${VPNHOST}" \`
+Add-VpnConnection -Name "${VPN_PUBLIC_IP}" \`
+  -ServerAddress "${VPN_PUBLIC_IP}" \`
   -TunnelType IKEv2 \`
   -EncryptionLevel Maximum \`
   -AuthenticationMethod EAP \`
   -RememberCredential
 
-Set-VpnConnectionIPsecConfiguration -ConnectionName "${VPNHOST}" \`
+Set-VpnConnectionIPsecConfiguration -ConnectionName "${VPN_PUBLIC_IP}" \`
   -AuthenticationTransformConstants GCMAES256 \`
   -CipherTransformConstants GCMAES256 \`
   -EncryptionMethod GCMAES256 \`
@@ -345,7 +286,7 @@ Set-VpnConnectionIPsecConfiguration -ConnectionName "${VPNHOST}" \`
 # Run the following command to retain access to the local network (e.g. printers, file servers) while the VPN is connected.
 # On a home network, you probably want this. On a public network, you probably don't.
 
-Set-VpnConnection -Name "${VPNHOST}" -SplitTunneling \$True
+Set-VpnConnection -Name "${VPN_PUBLIC_IP}" -SplitTunneling \$True
 
 You will need to enter your chosen VPN username and password in order to connect.
 
@@ -364,24 +305,3 @@ For a persistent connection, go to your device's Settings app and choose Network
 A bash script to set up strongSwan as a VPN client is attached as vpn-ubuntu-client.sh. You will need to chmod +x and then run the script as root.
 
 EOF
-
-cd
-
-echo
-echo "--- How to connect ---"
-echo
-echo "Connection instructions can be found in your home directory, '~/ikev2/connect'"
-
-echo
-echo "--- Build dokcaer image ---"
-echo
-
-docker build -t mn/ikev2 -f ~/ikev2/dockerfile .
-
-echo
-echo "--- Run docker container ---"
-echo
-
-docker-compose -f ~/ikev2/docker-compose.yml up -d
-
-docker ps

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>IKEv2</key>
+            <dict>
+                <key>AuthenticationMethod</key>
+                <string>None</string>
+                <key>ChildSecurityAssociationParameters</key>
+                <dict>
+                    <key>DiffieHellmanGroup</key>
+                    <integer>2</integer>
+                    <key>EncryptionAlgorithm</key>
+                    <string>3DES</string>
+                    <key>IntegrityAlgorithm</key>
+                    <string>SHA1-96</string>
+                    <key>LifeTimeInMinutes</key>
+                    <integer>1440</integer>
+                </dict>
+                <key>DeadPeerDetectionRate</key>
+                <string>Medium</string>
+                <key>DisableMOBIKE</key>
+                <integer>0</integer>
+                <key>DisableRedirect</key>
+                <integer>0</integer>
+                <key>EnableCertificateRevocationCheck</key>
+                <integer>0</integer>
+                <key>EnablePFS</key>
+                <integer>0</integer>
+                <key>IKESecurityAssociationParameters</key>
+                <dict>
+                    <key>DiffieHellmanGroup</key>
+                    <integer>2</integer>
+                    <key>EncryptionAlgorithm</key>
+                    <string>3DES</string>
+                    <key>IntegrityAlgorithm</key>
+                    <string>SHA1-96</string>
+                    <key>LifeTimeInMinutes</key>
+                    <integer>1440</integer>
+                </dict>
+                <key>LocalIdentifier</key>
+                <string>[LocalIdentifier]</string>
+                <key>RemoteAddress</key>
+                <string>[VPN Server Address]</string>
+                <key>RemoteIdentifier</key>
+                <string>[RemoteIdentifier]</string>
+                <key>UseConfigurationAttributeInternalIPSubnet</key>
+                <integer>0</integer>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Configures VPN settings</string>
+            <key>PayloadDisplayName</key>
+            <string>VPN (IKEv2)</string>
+            <key>PayloadIdentifier</key>
+            <string>com.yourcompany.vpnconfig</string>
+            <key>PayloadOrganization</key>
+            <string>Your Company</string>
+            <key>PayloadType</key>
+            <string>com.apple.vpn.managed</string>
+            <key>PayloadUUID</key>
+            <string>[Unique Payload UUID]</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Proxies</key>
+            <dict>
+                <key>HTTPEnable</key>
+                <integer>0</integer>
+                <key>HTTPSEnable</key>
+                <integer>0</integer>
+            </dict>
+            <key>UserDefinedName</key>
+            <string>[VPN Connection Name]</string>
+            <key>VPNType</key>
+            <string>IKEv2</string>
+            <key>OnDemandEnabled</key>
+            <integer>0</integer>
+            <key>OnDemandRules</key>
+            <array/>
+            <key>EAP</key>
+            <dict>
+                <key>AcceptEAPTypes</key>
+                <array>
+                    <integer>25</integer>
+                </array>
+                <key>PayloadCertificateAnchorUUID</key>
+                <array>
+                    <!-- Add Certificate UUID here if needed -->
+                </array>
+                <key>UserName</key>
+                <string>[Username]</string>
+                <key>Password</key>
+                <string>[Password]</string>
+            </dict>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Adds VPN configurations</string>
+    <key>PayloadDisplayName</key>
+    <string>VPN Configuration</string>
+    <key>PayloadIdentifier</key>
+    <string>com.yourcompany.vpnconfig</string>
+    <key>PayloadOrganization</key>
+    <string>Your Company</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>[Unique Configuration UUID]</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
