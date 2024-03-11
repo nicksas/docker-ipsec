@@ -6,7 +6,9 @@ This manual provides step-by-step instructions for setting up a VPN connection o
 
 For Linux users, it's essential to install certain packages and enable the option "Request an inner IP address". Execute the following commands in your terminal:
 
-``` bash sudo apt install network-manager-strongswan strongswan strongswan-pki libcharon-extra-plugins libcharon-extauth-plugins```
+``` bash 
+sudo apt install network-manager-strongswan strongswan strongswan-pki libcharon-extra-plugins libcharon-extauth-plugins
+```
 
 
 **Note:** Ensure that your VPN configuration includes the option to "Request an inner IP address".
@@ -30,25 +32,33 @@ Windows users need to import a certificate and configure the VPN connection usin
 
    Open PowerShell as an administrator and execute the following command:
 
-``` powershell Import-Certificate -CertStoreLocation cert:\LocalMachine\Root\ -FilePath C:\ca-cert.pem```
+``` powershell 
+Import-Certificate -CertStoreLocation cert:\LocalMachine\Root\ -FilePath C:\ca-cert.pem
+```
 
 2. **Add VPN Connection:**
 
    Still in PowerShell, add the VPN connection with the command below. Replace `"Your_IP_address"` with your actual VPN server IP address.
 
-``` powershell Add-VpnConnection -Name "Custom Name Vpn" -ServerAddress "Your_IP_address" -TunnelType "IKEv2" -AuthenticationMethod "EAP" -EncryptionLevel "Maximum" ` -RememberCredential```
+``` powershell 
+Add-VpnConnection -Name "Custom Name Vpn" -ServerAddress "Your_IP_address" -TunnelType "IKEv2" -AuthenticationMethod "EAP" -EncryptionLevel "Maximum" ` -RememberCredential
+```
 
 3. **Verify VPN Connection:**
 
    To ensure the VPN connection was added successfully, use:
 
-``` powershell Get-VpnConnection -Name "Custom Name Vpn"```
+``` powershell
+ Get-VpnConnection -Name "Custom Name Vpn"
+```
 
 4. **Set VPN Connection IPsec Configuration:**
 
    Finally, configure the IPsec settings with the following command:
 
-``` powershell Set-VpnConnectionIPsecConfiguration -Name "Custom Name Vpn" -AuthenticationTransformConstants GCMAES256 -CipherTransformConstants GCMAES256 -DHGroup ECP384 -IntegrityCheckMethod SHA384 -PfsGroup ECP384 -EncryptionMethod GCMAES256```
+``` powershell 
+Set-VpnConnectionIPsecConfiguration -Name "Custom Name Vpn" -AuthenticationTransformConstants GCMAES256 -CipherTransformConstants GCMAES256 -DHGroup ECP384 -IntegrityCheckMethod SHA384 -PfsGroup ECP384 -EncryptionMethod GCMAES256
+```
 
 ## Android Setup
 
