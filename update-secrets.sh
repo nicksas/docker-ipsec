@@ -63,7 +63,7 @@ status_update=0
 # Loop through all users
 for i in "${!users_array[@]}"; do
     user="${users_array[$i]}"
-    password="${passwords_array[$i]}"
+    password="${user}_${passwords_array[0]}"
     
     # Check if the user is already added
     if user_exists_in_file "$user"; then
