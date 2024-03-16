@@ -61,11 +61,26 @@ add_user_to_file() {
 status_update=0
 
 # Loop through all users
-for i in "${!users_array[@]}"; do
-    user="${users_array[$i]}"
-    password="${user}_${passwords_array[0]}"
+# for i in "${!users_array[@]}"; do
+#     user="${users_array[$i]}"
+#     password="${user}_${passwords_array[0]}"
     
-    # Check if the user is already added
+#     # Check if the user is already added
+#     if user_exists_in_file "$user"; then
+#         echo "User $user already exists in $FILE_PATH_SECRETS."
+#     else
+#         # Add user to the file
+#         status_update=1
+#         add_user_to_file "$user" "$password"
+#         echo "Added $user to $FILE_PATH_SECRETS."
+#     fi
+# done
+
+# Define a function to handle user existence check and addition
+handle_user_addition() {
+    local user="$1"
+    local password="$2"
+
     if user_exists_in_file "$user"; then
         echo "User $user already exists in $FILE_PATH_SECRETS."
     else
@@ -74,7 +89,25 @@ for i in "${!users_array[@]}"; do
         add_user_to_file "$user" "$password"
         echo "Added $user to $FILE_PATH_SECRETS."
     fi
-done
+}
+
+# Check if there are more users than passwords
+if [[ ${#users_array[@]} -gt ${#passwords_array[@]} ]]; then
+    # If there are more users, use the first password for all users
+    for user in "${users_array[@]}"; do
+        password="${user}_${passwords_array[0]}"
+        handle_user_addition "$user" "$password"
+    done
+else
+    # If the number of users and passwords is equal, assign passwords by index
+    for i in "${!users_array[@]}"; do
+        user="${users_array[$i]}"
+        password="${passwords_array[$i]}"
+        
+        handle_user_addition "$user" "$password"
+    done
+fi
+
 
 ipsec restart
 
