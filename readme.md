@@ -2,6 +2,16 @@
 
 This manual provides step-by-step instructions for setting up a VPN connection on various operating systems including Linux, Windows, Android, and iOS. Please follow the instructions specific to your operating system.
 
+## Build
+1. git clone 
+2. cp .env.example .env
+3. Configuration .env. Add username and password, public ip
+4. docker build -t ipsec .
+5. Copy docker image name (e.g. docker.io/library/ipsec)
+6. Add docker image name to docker-compose.yml (e.g. image: docker.io/library/ipsec)
+7. docker compose up -d
+8. Copy ca-certs.pem from data/cacerts/ca-cert.pem
+
 ## Linux Setup
 
 For Linux users, it's essential to install certain packages and enable the option "Request an inner IP address". Execute the following commands in your terminal:
