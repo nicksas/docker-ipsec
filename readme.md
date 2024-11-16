@@ -31,17 +31,6 @@ Windows users need to import a certificate and configure the VPN connection usin
 
    Open PowerShell as an administrator and execute the following command:
 
-
-**Note:** Ensure that your VPN configuration includes the option to "Request an inner IP address".
-
-## Windows Setup
-
-Windows users need to import a certificate and configure the VPN connection using PowerShell commands. Follow these steps:
-
-1. **Import the Certificate:**
-
-   Open PowerShell as an administrator and execute the following command:
-
 ``` powershell 
 Import-Certificate -CertStoreLocation cert:\LocalMachine\Root\ -FilePath C:\ca-cert.pem
 ```
