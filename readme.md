@@ -5,7 +5,7 @@ This manual provides step-by-step instructions for setting up a VPN connection o
 ## Build
 1. git clone 
 2. cp .env.example .env
-3. Configuration .env. Add username and password, public ip
+3. Configuration .env. Add username and password, public ip (if the password is the same for everyone, then the password will be "login_password")
 4. docker build -t ipsec .
 5. Copy docker image name (e.g. docker.io/library/ipsec)
 6. Add docker image name to docker-compose.yml (e.g. image: docker.io/library/ipsec)
